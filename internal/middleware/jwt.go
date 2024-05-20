@@ -3,7 +3,6 @@ package middleware
 import (
 	"fmt"
 	"go-security/config"
-	"strings"
 
 	"github.com/dgrijalva/jwt-go"
 	"github.com/gin-gonic/gin"
@@ -11,21 +10,14 @@ import (
 
 func JWTAuthMiddleware(cfg config.Config) gin.HandlerFunc {
 	return func(c *gin.Context) {
-		authHeader := c.GetHeader("Authorization")
-		if authHeader == "" {
-			c.JSON(401, gin.H{"error": "Missing or invalid Authorization header"})
+		cookie, err := c.Cookie("token")
+		if err != nil {
+			c.JSON(401, gin.H{"error": "Missing auth context"})
 			c.Abort()
 			return
 		}
 
-		parts := strings.Split(authHeader, " ")
-		if len(parts) != 2 {
-			c.JSON(401, gin.H{"error": "Invalid Authorization header format"})
-			c.Abort()
-			return
-		}
-
-		tokenString := parts[1]
+		tokenString := cookie
 		token, err := jwt.Parse(tokenString, func(token *jwt.Token) (interface{}, error) {
 			if _, ok := token.Method.(*jwt.SigningMethodHMAC); !ok {
 				return nil, fmt.Errorf("unexpected signing method: %v", token.Header["alg"])

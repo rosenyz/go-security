@@ -2,6 +2,7 @@ package handlers
 
 import (
 	"log"
+	"net/http"
 	"time"
 
 	"go-security/config"
@@ -69,9 +70,17 @@ func LoginHandler(db *gorm.DB, cfg config.Config) gin.HandlerFunc {
 			return
 		}
 
+		cookie := &http.Cookie{
+			Name:     "token",
+			Value:    tokenString,
+			Expires:  expirationTime,
+			Path:     "/",
+			HttpOnly: true,
+		}
+		c.Writer.Header().Set("Set-Cookie", cookie.String())
+
 		c.JSON(200, gin.H{
 			"message":         "success",
-			"token":           tokenString,
 			"expiration_time": expirationTime.Format(time.RFC3339),
 		})
 	}

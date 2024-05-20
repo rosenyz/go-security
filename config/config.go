@@ -14,11 +14,8 @@ type DBConfig struct {
 }
 
 type JWTConfig struct {
-	Secret             string
-	Issuer             string
-	ExpirationTime     time.Duration
-	TokenLookup        string
-	AuthScheme         string
-	SigningAlgorithm   string
-	DisableAutoRefresh bool
+	Secret           string
+	ExpirationTime   time.Duration
+	TokenLookup      string
+	SigningAlgorithm string
 }

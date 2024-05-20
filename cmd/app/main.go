@@ -18,13 +18,10 @@ func main() {
 			URL:     "host=localhost user=postgres dbname=go-security sslmode=disable password=pass",
 		},
 		JWT: config.JWTConfig{
-			Secret:             "secret-go-security-SOSFIJofis9afh9sa",
-			Issuer:             "issuer",
-			ExpirationTime:     5 * time.Minute,
-			TokenLookup:        "user",
-			AuthScheme:         "Bearer",
-			SigningAlgorithm:   "HS256",
-			DisableAutoRefresh: false,
+			Secret:           "secret-go-security-SOSFIJofis9afh9sa",
+			ExpirationTime:   5 * time.Minute,
+			TokenLookup:      "user",
+			SigningAlgorithm: "HS256",
 		},
 		ServerAddr: ":8080",
 	}
